@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { fakeAPI } from '../services/api';
+import { motion } from 'framer-motion';
 
 const Container = styled.div`
   padding: 20px;
+`;
+
+const MotionWrap = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
 `;
 
 const TopBar = styled.div`
@@ -95,10 +101,10 @@ export function Estoque() {
   };
 
   const exportarCSV = () => {
-    const rows = ["Produto,Código,Quantidade,Preço"].concat(
+    const rows = ['Produto,Código,Quantidade,Preço'].concat(
       produtos.map(p => `${p.nome},${p.codigo},${p.quantidade},${p.preco}`)
     );
-    const blob = new Blob([rows.join("\n")], { type: 'text/csv' });
+    const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = 'estoque.csv';
@@ -117,58 +123,64 @@ export function Estoque() {
 
   return (
     <Container>
-      <TopBar>
-        <Input placeholder="Pesquisar produtos" value={filtro} onChange={(e) => setFiltro(e.target.value)} />
-        <Button onClick={() => setShowForm(true)}>Adicionar</Button>
-        <Select><option>Ordenar</option></Select>
-        <Select><option>Exibir</option></Select>
-        <Select><option>Tags</option></Select>
-        <Select><option>Categoria</option></Select>
-        <Button onClick={exportarCSV}>Exportar</Button>
-      </TopBar>
+      <MotionWrap
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <TopBar>
+          <Input placeholder="Pesquisar produtos" value={filtro} onChange={(e) => setFiltro(e.target.value)} />
+          <Button onClick={() => setShowForm(true)}>Adicionar</Button>
+          <Select><option>Ordenar</option></Select>
+          <Select><option>Exibir</option></Select>
+          <Select><option>Tags</option></Select>
+          <Select><option>Categoria</option></Select>
+          <Button onClick={exportarCSV}>Exportar</Button>
+        </TopBar>
 
-      {showForm && (
-        <div style={{ marginBottom: '20px' }}>
-          <h3>{editIndex !== null ? 'Editar Produto' : 'Novo Produto'}</h3>
-          <Input placeholder="Nome" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
-          <Input placeholder="Código" value={form.codigo} onChange={(e) => setForm({ ...form, codigo: e.target.value })} />
-          <Input placeholder="Quantidade" type="number" value={form.quantidade} onChange={(e) => setForm({ ...form, quantidade: e.target.value })} />
-          <Input placeholder="Preço" type="number" value={form.preco} onChange={(e) => setForm({ ...form, preco: e.target.value })} />
-          <Button onClick={adicionarProduto}>{editIndex !== null ? 'Atualizar' : 'Salvar'}</Button>
-        </div>
-      )}
+        {showForm && (
+          <div style={{ marginBottom: '20px' }}>
+            <h3>{editIndex !== null ? 'Editar Produto' : 'Novo Produto'}</h3>
+            <Input placeholder="Nome" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
+            <Input placeholder="Código" value={form.codigo} onChange={(e) => setForm({ ...form, codigo: e.target.value })} />
+            <Input placeholder="Quantidade" type="number" value={form.quantidade} onChange={(e) => setForm({ ...form, quantidade: e.target.value })} />
+            <Input placeholder="Preço" type="number" value={form.preco} onChange={(e) => setForm({ ...form, preco: e.target.value })} />
+            <Button onClick={adicionarProduto}>{editIndex !== null ? 'Atualizar' : 'Salvar'}</Button>
+          </div>
+        )}
 
-      <Table>
-        <thead>
-          <tr>
-            <Th>Produto</Th>
-            <Th>Código</Th>
-            <Th>Quantidade</Th>
-            <Th>Valor</Th>
-            <Th>Ações</Th>
-          </tr>
-        </thead>
-        <tbody>
-          {produtosPaginados.map((p, i) => (
-            <tr key={i}>
-              <Td>{p.nome}</Td>
-              <Td>{p.codigo}</Td>
-              <Td>{p.quantidade || 0}</Td>
-              <Td>R$ {p.preco}</Td>
-              <Td>
-                <Button onClick={() => editarProduto(inicio + i)}>Editar</Button>
-                <Button onClick={() => excluirProduto(inicio + i)} style={{ backgroundColor: '#dc3545' }}>Excluir</Button>
-              </Td>
+        <Table>
+          <thead>
+            <tr>
+              <Th>Produto</Th>
+              <Th>Código</Th>
+              <Th>Quantidade</Th>
+              <Th>Valor</Th>
+              <Th>Ações</Th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {produtosPaginados.map((p, i) => (
+              <tr key={i}>
+                <Td>{p.nome}</Td>
+                <Td>{p.codigo}</Td>
+                <Td>{p.quantidade || 0}</Td>
+                <Td>R$ {p.preco}</Td>
+                <Td>
+                  <Button onClick={() => editarProduto(inicio + i)}>Editar</Button>
+                  <Button onClick={() => excluirProduto(inicio + i)} style={{ backgroundColor: '#dc3545' }}>Excluir</Button>
+                </Td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
 
-      <Pagination>
-        {[...Array(totalPaginas)].map((_, i) => (
-          <Button key={i} onClick={() => setPaginaAtual(i + 1)}>{i + 1}</Button>
-        ))}
-      </Pagination>
+        <Pagination>
+          {[...Array(totalPaginas)].map((_, i) => (
+            <Button key={i} onClick={() => setPaginaAtual(i + 1)}>{i + 1}</Button>
+          ))}
+        </Pagination>
+      </MotionWrap>
     </Container>
   );
 }

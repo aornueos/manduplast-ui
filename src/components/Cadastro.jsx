@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
 const Container = styled.div`
   display: flex;
@@ -9,7 +10,7 @@ const Container = styled.div`
   background: #fff;
 `;
 
-const Box = styled.div`
+const MotionBox = styled(motion.div)`
   display: flex;
   width: 900px;
   border-radius: 10px;
@@ -72,7 +73,11 @@ export function Cadastro() {
 
   return (
     <Container>
-      <Box>
+      <MotionBox
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         <Left>
           <Title>CADASTRO</Title>
           <Input placeholder="Nome" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
@@ -85,7 +90,7 @@ export function Cadastro() {
           <p>Crie sua conta para acessar a plataforma</p>
           <Button onClick={handleSubmit}>Cadastrar</Button>
         </Right>
-      </Box>
+      </MotionBox>
     </Container>
   );
 }

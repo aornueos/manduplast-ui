@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { motion } from 'framer-motion';
 
 const Container = styled.div`
   display: flex;
@@ -9,7 +12,7 @@ const Container = styled.div`
   background: #fff;
 `;
 
-const LoginBox = styled.div`
+const MotionBox = styled(motion.div)`
   display: flex;
   width: 900px;
   border-radius: 10px;
@@ -55,37 +58,54 @@ const Button = styled.button`
   margin-top: 10px;
 `;
 
-export function Login() {
+export function Login({ setUsuarioLogado }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    const existe = usuarios.find(u => u.email === email && u.senha === senha);
-    if (existe) {
-      alert(`Bem-vindo(a), ${existe.nome}!`);
-      window.location.href = '/';
+  const handleLogin = () => {
+    const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+    const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+
+    if (usuario) {
+      localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+      setUsuarioLogado(usuario);
+      toast.success('Login realizado com sucesso!');
+      navigate('/');
     } else {
-      alert('Usuário ou senha incorretos');
+      toast.error('E-mail ou senha inválidos');
     }
   };
 
   return (
     <Container>
-      <LoginBox>
+      <MotionBox
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         <Left>
           <Title>LOGIN</Title>
-          <Input placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <Input placeholder="Senha" type="password" value={senha} onChange={(e) => setSenha(e.target.value)} />
-          <Button onClick={handleLogin}>Login</Button>
+          <Input
+            type="email"
+            placeholder="E-mail"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Senha"
+            value={senha}
+            onChange={e => setSenha(e.target.value)}
+          />
+          <Button onClick={handleLogin}>Entrar</Button>
         </Left>
         <Right>
           <h1>Bem-vindo de volta</h1>
-          <p>Faça seu login novamente</p>
-          <Button onClick={handleLogin}>Login</Button>
+          <p>Entre com sua conta para acessar a plataforma</p>
+          <Button onClick={handleLogin}>Entrar</Button>
         </Right>
-      </LoginBox>
+      </MotionBox>
     </Container>
   );
 }
