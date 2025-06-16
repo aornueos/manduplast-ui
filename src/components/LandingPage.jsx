@@ -1,44 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  font-family: 'Poppins', sans-serif;
 `;
 
 const Hero = styled.div`
   background-color: #00a859;
   color: white;
-  padding: 60px 20px;
+  padding: 80px 20px;
   text-align: center;
 `;
 
 const HeroTitle = styled.h1`
-  font-size: 32px;
-  margin-bottom: 10px;
+  font-size: 36px;
+  margin-bottom: 12px;
 `;
 
 const HeroSubtitle = styled.p`
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  font-size: 18px;
 `;
 
 const HeroButton = styled.button`
-  padding: 10px 20px;
+  padding: 12px 24px;
   background-color: #f7b500;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+
+  &:hover {
+    opacity: 0.9;
+  }
 `;
 
 const Section = styled.div`
   text-align: center;
-  padding: 40px 20px;
+  padding: 60px 20px;
   background-color: #f5f5f5;
 `;
 
 const Title = styled.h2`
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  font-size: 28px;
 `;
 
 const Features = styled.div`
@@ -50,47 +59,66 @@ const Features = styled.div`
 
 const Feature = styled.div`
   background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   width: 280px;
-  min-height: 150px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  transition: 0.3s;
+  cursor: default;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  h3 {
+    margin-bottom: 10px;
+    color: #00a859;
+  }
+
+  p {
+    color: #555;
+    font-size: 15px;
+  }
 `;
 
 const FormSection = styled.div`
   background: #f5f5f5;
-  padding: 40px 20px;
+  padding: 50px 40px;
   border-radius: 12px;
   max-width: 400px;
-  margin: 30px auto 60px;
+  margin: 0 auto 80px;
   text-align: center;
 `;
 
 const Input = styled.input`
-  width: 80%;
-  padding: 10px;
-  margin-bottom: 12px;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 14px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-size: 15px;
 `;
 
 const Button = styled.button`
-  width: 50%;
+  width: 100%;
   padding: 12px;
   background-color: #f7b500;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  transition: 0.3s;
+
+  &:hover {
+    opacity: 0.9;
+  }
 `;
 
 export function LandingPage() {
   const [form, setForm] = useState({ nome: '', email: '', senha: '' });
+  const formRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -111,6 +139,10 @@ export function LandingPage() {
     setForm({ nome: '', email: '', senha: '' });
   };
 
+  const scrollToForm = () => {
+    formRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <Container>
       <Hero>
@@ -118,7 +150,7 @@ export function LandingPage() {
         <HeroSubtitle>
           Gerencie sua empresa de forma simples e eficiente. O futuro da gestão está aqui!
         </HeroSubtitle>
-        <HeroButton>Comece Agora</HeroButton>
+        <HeroButton onClick={scrollToForm}>Comece Agora</HeroButton>
       </Hero>
 
       <Section>
@@ -126,20 +158,20 @@ export function LandingPage() {
         <Features>
           <Feature>
             <h3>Gestão de Pedidos</h3>
-            <p>Controle de pedidos e entregas em tempo real</p>
+            <p>Controle de pedidos e entregas em tempo real, de forma prática e intuitiva.</p>
           </Feature>
           <Feature>
             <h3>Estoque Inteligente</h3>
-            <p>Atualização automática e controle de estoque</p>
+            <p>Atualização automática e controle total sobre seu estoque e inventário.</p>
           </Feature>
           <Feature>
             <h3>Relatórios Personalizados</h3>
-            <p>Indicadores e relatórios gerenciais</p>
+            <p>Indicadores e relatórios gerenciais claros para tomadas de decisão.</p>
           </Feature>
         </Features>
       </Section>
 
-      <FormSection>
+      <FormSection ref={formRef}>
         <h3>Cadastre-se e Comece Agora</h3>
         <Input
           placeholder="Nome"
@@ -148,6 +180,7 @@ export function LandingPage() {
         />
         <Input
           placeholder="E-mail"
+          type="email"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
         />

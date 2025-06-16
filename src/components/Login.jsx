@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const Container = styled.div`
@@ -15,9 +15,9 @@ const Box = styled.div`
   display: flex;
   width: 900px;
   max-width: 100%;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
   flex-direction: column;
 
   @media (min-width: 768px) {
@@ -27,60 +27,63 @@ const Box = styled.div`
 
 const Left = styled.div`
   flex: 1;
+  background: white;
   padding: 40px;
-  background: #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
 `;
 
 const Right = styled.div`
   flex: 1;
   background-color: #00a859;
   color: white;
+  padding: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  padding: 40px;
+  text-align: center;
 `;
 
 const Title = styled.h2`
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Input = styled.input`
   width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-  font-size: 16px;
+  padding: 12px;
+  margin-bottom: 14px;
   border: 1px solid #ccc;
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  border-radius: 8px;
+  font-size: 16px;
 `;
 
 const Button = styled.button`
-  background: #00a859;
+  background-color: #00a859;
   color: white;
   padding: 12px;
   border: none;
-  cursor: pointer;
-  width: 50%;
+  width: 100%;
+  border-radius: 8px;
   font-size: 16px;
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  cursor: pointer;
+  transition: 0.3s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+`;
+
+const Small = styled.p`
+  margin-top: 12px;
+  font-size: 14px;
+
+  a {
+    color: #00a859;
+    text-decoration: none;
+    font-weight: 600;
+  }
 `;
 
 export function Login({ setUsuarioLogado }) {
@@ -89,14 +92,20 @@ export function Login({ setUsuarioLogado }) {
   const navigate = useNavigate();
 
   const handleLogin = () => {
+    if (!email || !senha) {
+      return toast.error('Preencha todos os campos');
+    }
+
     const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-    const usuario = usuarios.find((u) => u.email === email && u.senha === senha);
+    const usuario = usuarios.find(
+      (u) => u.email === email && u.senha === senha
+    );
 
     if (usuario) {
       localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
       setUsuarioLogado(usuario);
       toast.success('Login realizado com sucesso!');
-      navigate('/');
+      navigate('/estoque');
     } else {
       toast.error('E-mail ou senha inválidos');
     }
@@ -106,7 +115,7 @@ export function Login({ setUsuarioLogado }) {
     <Container>
       <Box>
         <Left>
-          <Title>LOGIN</Title>
+          <Title>Login</Title>
           <Input
             type="email"
             placeholder="E-mail"
@@ -120,10 +129,13 @@ export function Login({ setUsuarioLogado }) {
             onChange={(e) => setSenha(e.target.value)}
           />
           <Button onClick={handleLogin}>Entrar</Button>
+          <Small>
+            Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
+          </Small>
         </Left>
         <Right>
           <h1>Bem-vindo de volta</h1>
-          <p>Entre com sua conta para acessar a plataforma</p>
+          <p>Faça login para acessar sua conta no Next ERP.</p>
         </Right>
       </Box>
     </Container>

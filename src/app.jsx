@@ -10,14 +10,30 @@ import { Perfil } from './components/Perfil.jsx';
 import { toast } from 'react-toastify';
 import { User, LogOut, UserCircle2 } from 'lucide-react';
 import { PageWrapper } from './components/PageWrapper.jsx';
+import { PrivateRoute } from './components/PrivateRoute.jsx';
 
 const Nav = styled.nav`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
   display: flex;
   gap: 20px;
   padding: 10px 20px;
   background: #00a859;
   color: white;
   align-items: center;
+
+  a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
 `;
 
 const Dropdown = styled.div`
@@ -57,12 +73,17 @@ const DropdownItem = styled.button`
 export default function App() {
   const [usuarioLogado, setUsuarioLogado] = useState(null);
   const [dropdownAberto, setDropdownAberto] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
+  // 🔥 Carregar usuário do localStorage
   useEffect(() => {
     const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
-    if (usuario) setUsuarioLogado(usuario);
+    if (usuario) {
+      setUsuarioLogado(usuario);
+    }
+    setLoading(false);
   }, []);
 
   const handleLogout = () => {
@@ -75,15 +96,8 @@ export default function App() {
   return (
     <>
       <Nav>
-        <Link to="/" style={{ color: 'white' }}>
-          Início
-        </Link>
-        <Link to="/estoque" style={{ color: 'white' }}>
-          Produtos
-        </Link>
-        <Link to="/pedidos" style={{ color: 'white' }}>
-          Pedidos
-        </Link>
+        <Link to="/">Início</Link>
+        <Link to="/estoque">Produtos</Link>
         {usuarioLogado ? (
           <Dropdown style={{ marginLeft: 'auto' }}>
             <span
@@ -103,15 +117,14 @@ export default function App() {
           </Dropdown>
         ) : (
           <>
-            <Link to="/login" style={{ color: 'white', marginLeft: 'auto' }}>
+            <Link to="/login" style={{ marginLeft: 'auto' }}>
               Login
             </Link>
-            <Link to="/cadastro" style={{ color: 'white' }}>
-              Cadastro
-            </Link>
+            <Link to="/cadastro">Cadastro</Link>
           </>
         )}
       </Nav>
+
       <Routes location={location} key={location.pathname}>
         <Route
           path="/"
@@ -124,31 +137,31 @@ export default function App() {
         <Route
           path="/estoque"
           element={
-            <ProtectedRoute usuarioLogado={usuarioLogado}>
+            <PrivateRoute usuarioLogado={usuarioLogado} loading={loading}>
               <PageWrapper>
                 <Estoque />
               </PageWrapper>
-            </ProtectedRoute>
+            </PrivateRoute>
           }
         />
         <Route
           path="/pedidos"
           element={
-            <ProtectedRoute usuarioLogado={usuarioLogado}>
+            <PrivateRoute usuarioLogado={usuarioLogado} loading={loading}>
               <PageWrapper>
                 <OrderForm />
               </PageWrapper>
-            </ProtectedRoute>
+            </PrivateRoute>
           }
         />
         <Route
           path="/perfil"
           element={
-            <ProtectedRoute usuarioLogado={usuarioLogado}>
+            <PrivateRoute usuarioLogado={usuarioLogado} loading={loading}>
               <PageWrapper>
                 <Perfil />
               </PageWrapper>
-            </ProtectedRoute>
+            </PrivateRoute>
           }
         />
         <Route
@@ -170,11 +183,4 @@ export default function App() {
       </Routes>
     </>
   );
-}
-
-function ProtectedRoute({ usuarioLogado, children }) {
-  if (!usuarioLogado) {
-    return <Navigate to="/login" replace />;
-  }
-  return children;
 }
