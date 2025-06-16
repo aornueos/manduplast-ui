@@ -18,11 +18,7 @@ const StyledButton = styled(motion.button)`
 
 export function AnimatedButton({ children, ...props }) {
   return (
-    <StyledButton
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      {...props}
-    >
+    <StyledButton whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} {...props}>
       {children}
     </StyledButton>
   );

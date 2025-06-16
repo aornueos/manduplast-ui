@@ -75,9 +75,15 @@ export default function App() {
   return (
     <>
       <Nav>
-        <Link to="/" style={{ color: 'white' }}>Início</Link>
-        <Link to="/estoque" style={{ color: 'white' }}>Produtos</Link>
-        <Link to="/pedidos" style={{ color: 'white' }}>Pedidos</Link>
+        <Link to="/" style={{ color: 'white' }}>
+          Início
+        </Link>
+        <Link to="/estoque" style={{ color: 'white' }}>
+          Produtos
+        </Link>
+        <Link to="/pedidos" style={{ color: 'white' }}>
+          Pedidos
+        </Link>
         {usuarioLogado ? (
           <Dropdown style={{ marginLeft: 'auto' }}>
             <span
@@ -97,25 +103,70 @@ export default function App() {
           </Dropdown>
         ) : (
           <>
-            <Link to="/login" style={{ color: 'white', marginLeft: 'auto' }}>Login</Link>
-            <Link to="/cadastro" style={{ color: 'white' }}>Cadastro</Link>
+            <Link to="/login" style={{ color: 'white', marginLeft: 'auto' }}>
+              Login
+            </Link>
+            <Link to="/cadastro" style={{ color: 'white' }}>
+              Cadastro
+            </Link>
           </>
         )}
       </Nav>
       <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageWrapper><LandingPage /></PageWrapper>} />
+        <Route
+          path="/"
+          element={
+            <PageWrapper>
+              <LandingPage />
+            </PageWrapper>
+          }
+        />
         <Route
           path="/estoque"
           element={
             <ProtectedRoute usuarioLogado={usuarioLogado}>
-              <PageWrapper><Estoque /></PageWrapper>
+              <PageWrapper>
+                <Estoque />
+              </PageWrapper>
             </ProtectedRoute>
           }
         />
-        <Route path="/pedidos" element={<PageWrapper><OrderForm /></PageWrapper>} />
-        <Route path="/perfil" element={<PageWrapper><Perfil /></PageWrapper>} />
-        <Route path="/login" element={<PageWrapper><Login setUsuarioLogado={setUsuarioLogado} /></PageWrapper>} />
-        <Route path="/cadastro" element={<PageWrapper><Cadastro /></PageWrapper>} />
+        <Route
+          path="/pedidos"
+          element={
+            <ProtectedRoute usuarioLogado={usuarioLogado}>
+              <PageWrapper>
+                <OrderForm />
+              </PageWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/perfil"
+          element={
+            <ProtectedRoute usuarioLogado={usuarioLogado}>
+              <PageWrapper>
+                <Perfil />
+              </PageWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <PageWrapper>
+              <Login setUsuarioLogado={setUsuarioLogado} />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/cadastro"
+          element={
+            <PageWrapper>
+              <Cadastro />
+            </PageWrapper>
+          }
+        />
       </Routes>
     </>
   );

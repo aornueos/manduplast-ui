@@ -85,10 +85,15 @@ export function Estoque() {
   }, []);
 
   const adicionarProduto = () => {
-    if (!form.nome || !form.codigo || !form.preco) return alert('Preencha todos os campos obrigatórios');
+    if (!form.nome || !form.codigo || !form.preco)
+      return alert('Preencha todos os campos obrigatórios');
     const atualizados = [...produtos];
     if (editIndex !== null) {
-      atualizados[editIndex] = { ...form, quantidade: Number(form.quantidade), preco: Number(form.preco) };
+      atualizados[editIndex] = {
+        ...form,
+        quantidade: Number(form.quantidade),
+        preco: Number(form.preco),
+      };
     } else {
       atualizados.push({ ...form, quantidade: Number(form.quantidade), preco: Number(form.preco) });
     }
@@ -112,7 +117,7 @@ export function Estoque() {
 
   const exportarCSV = () => {
     const rows = ['Produto,Código,Quantidade,Preço'].concat(
-      produtos.map(p => `${p.nome},${p.codigo},${p.quantidade},${p.preco}`)
+      produtos.map((p) => `${p.nome},${p.codigo},${p.quantidade},${p.preco}`)
     );
     const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
     const link = document.createElement('a');
@@ -121,9 +126,10 @@ export function Estoque() {
     link.click();
   };
 
-  const produtosFiltrados = produtos.filter(p =>
-    p.nome.toLowerCase().includes(filtro.toLowerCase()) ||
-    p.codigo.toLowerCase().includes(filtro.toLowerCase())
+  const produtosFiltrados = produtos.filter(
+    (p) =>
+      p.nome.toLowerCase().includes(filtro.toLowerCase()) ||
+      p.codigo.toLowerCase().includes(filtro.toLowerCase())
   );
 
   const inicio = (paginaAtual - 1) * itensPorPagina;
@@ -140,10 +146,18 @@ export function Estoque() {
           onChange={(e) => setFiltro(e.target.value)}
         />
         <Button onClick={() => setShowForm(true)}>Adicionar</Button>
-        <Select><option>Ordenar</option></Select>
-        <Select><option>Exibir</option></Select>
-        <Select><option>Tags</option></Select>
-        <Select><option>Categoria</option></Select>
+        <Select>
+          <option>Ordenar</option>
+        </Select>
+        <Select>
+          <option>Exibir</option>
+        </Select>
+        <Select>
+          <option>Tags</option>
+        </Select>
+        <Select>
+          <option>Categoria</option>
+        </Select>
         <Button onClick={exportarCSV}>Exportar</Button>
       </TopBar>
 
@@ -172,9 +186,7 @@ export function Estoque() {
             value={form.preco}
             onChange={(e) => setForm({ ...form, preco: e.target.value })}
           />
-          <Button onClick={adicionarProduto}>
-            {editIndex !== null ? 'Atualizar' : 'Salvar'}
-          </Button>
+          <Button onClick={adicionarProduto}>{editIndex !== null ? 'Atualizar' : 'Salvar'}</Button>
         </FormCard>
       )}
 

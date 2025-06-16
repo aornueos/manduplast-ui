@@ -11,7 +11,9 @@ export function PaymentForm() {
   const [status, setStatus] = useState(null);
 
   const processar = () => {
-    fakeAPI.processPayment({ metodo, status: 'aprovado' }).then(() => setStatus('Pagamento aprovado'));
+    fakeAPI
+      .processPayment({ metodo, status: 'aprovado' })
+      .then(() => setStatus('Pagamento aprovado'));
   };
 
   return (

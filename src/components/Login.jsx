@@ -9,7 +9,6 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   padding: 20px;
-
 `;
 
 const Box = styled.div`
@@ -18,9 +17,8 @@ const Box = styled.div`
   max-width: 100%;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   flex-direction: column;
-
 
   @media (min-width: 768px) {
     flex-direction: row;
@@ -31,7 +29,7 @@ const Left = styled.div`
   flex: 1;
   padding: 40px;
   background: #fff;
-    display: flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -51,7 +49,7 @@ const Right = styled.div`
 const Title = styled.h2`
   margin-bottom: 20px;
   text-align: center;
-    display: flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -64,7 +62,7 @@ const Input = styled.input`
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 6px;
-    display: flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -79,7 +77,7 @@ const Button = styled.button`
   width: 50%;
   font-size: 16px;
   border-radius: 6px;
-    display: flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -92,7 +90,7 @@ export function Login({ setUsuarioLogado }) {
 
   const handleLogin = () => {
     const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-    const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+    const usuario = usuarios.find((u) => u.email === email && u.senha === senha);
 
     if (usuario) {
       localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
@@ -113,13 +111,13 @@ export function Login({ setUsuarioLogado }) {
             type="email"
             placeholder="E-mail"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <Input
             type="password"
             placeholder="Senha"
             value={senha}
-            onChange={e => setSenha(e.target.value)}
+            onChange={(e) => setSenha(e.target.value)}
           />
           <Button onClick={handleLogin}>Entrar</Button>
         </Left>

@@ -15,9 +15,8 @@ const Box = styled.div`
   max-width: 100%;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   flex-direction: column;
-
 
   @media (min-width: 768px) {
     flex-direction: row;
@@ -92,7 +91,7 @@ export function Cadastro() {
     }
 
     const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    const jaExiste = usuarios.some(u => u.email === form.email);
+    const jaExiste = usuarios.some((u) => u.email === form.email);
 
     if (jaExiste) {
       return alert('E-mail já cadastrado');

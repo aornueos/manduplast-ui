@@ -23,7 +23,7 @@ export function ProductForm({ onProductAdded }) {
       setError('Todos os campos são obrigatórios');
       return;
     }
-    const exists = (await fakeAPI.getProducts()).some(p => p.codigo === form.codigo);
+    const exists = (await fakeAPI.getProducts()).some((p) => p.codigo === form.codigo);
     if (exists) {
       setError('Código já cadastrado');
       return;
@@ -38,7 +38,13 @@ export function ProductForm({ onProductAdded }) {
     <Form onSubmit={handleSubmit}>
       <input name="nome" placeholder="Nome" value={form.nome} onChange={handleChange} />
       <input name="codigo" placeholder="Código" value={form.codigo} onChange={handleChange} />
-      <input name="preco" type="number" placeholder="Preço" value={form.preco} onChange={handleChange} />
+      <input
+        name="preco"
+        type="number"
+        placeholder="Preço"
+        value={form.preco}
+        onChange={handleChange}
+      />
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <button type="submit">Cadastrar</button>
     </Form>

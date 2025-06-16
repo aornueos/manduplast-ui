@@ -8,7 +8,7 @@ const Container = styled.div`
   padding: 30px;
   background-color: #f4f4f4;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 `;
 
@@ -38,8 +38,12 @@ export function Perfil() {
         <UserCircle2 size={64} />
       </Avatar>
       <h2>Perfil do Usuário</h2>
-      <Info><strong>Nome:</strong> {usuario.nome}</Info>
-      <Info><strong>Email:</strong> {usuario.email}</Info>
+      <Info>
+        <strong>Nome:</strong> {usuario.nome}
+      </Info>
+      <Info>
+        <strong>Email:</strong> {usuario.email}
+      </Info>
     </Container>
   );
 }

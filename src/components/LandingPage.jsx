@@ -52,7 +52,7 @@ const Feature = styled.div`
   background: white;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
   width: 280px;
   min-height: 150px;
   box-sizing: border-box;
@@ -99,7 +99,7 @@ export function LandingPage() {
     }
 
     const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    const jaExiste = usuarios.some(u => u.email === form.email);
+    const jaExiste = usuarios.some((u) => u.email === form.email);
 
     if (jaExiste) {
       return alert('E-mail já cadastrado');
@@ -115,7 +115,9 @@ export function LandingPage() {
     <Container>
       <Hero>
         <HeroTitle>Transforme sua gestão com o Next ERP</HeroTitle>
-        <HeroSubtitle>Gerencie sua empresa de forma simples e eficiente. O futuro da gestão está aqui!</HeroSubtitle>
+        <HeroSubtitle>
+          Gerencie sua empresa de forma simples e eficiente. O futuro da gestão está aqui!
+        </HeroSubtitle>
         <HeroButton>Comece Agora</HeroButton>
       </Hero>
 
