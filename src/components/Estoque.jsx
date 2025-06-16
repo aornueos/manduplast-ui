@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { fakeAPI } from '../services/api';
-import { motion } from 'framer-motion';
 
 const Container = styled.div`
   padding: 20px;
-`;
-
-const MotionWrap = styled(motion.div)`
-  display: flex;
-  flex-direction: column;
 `;
 
 const TopBar = styled.div`
@@ -23,6 +17,7 @@ const TopBar = styled.div`
 const Input = styled.input`
   flex: 1;
   padding: 10px;
+  min-width: 200px;
 `;
 
 const Button = styled.button`
@@ -31,15 +26,22 @@ const Button = styled.button`
   color: white;
   border: none;
   cursor: pointer;
+  border-radius: 6px;
 `;
 
 const Select = styled.select`
   padding: 10px;
+  min-width: 120px;
+`;
+
+const TableWrapper = styled.div`
+  overflow-x: auto;
 `;
 
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+  min-width: 600px;
 `;
 
 const Th = styled.th`
@@ -59,6 +61,14 @@ const Pagination = styled.div`
   display: flex;
   justify-content: center;
   gap: 10px;
+`;
+
+const FormCard = styled.div`
+  background: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  max-width: 500px;
 `;
 
 export function Estoque() {
@@ -123,32 +133,52 @@ export function Estoque() {
 
   return (
     <Container>
-      <MotionWrap
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <TopBar>
-          <Input placeholder="Pesquisar produtos" value={filtro} onChange={(e) => setFiltro(e.target.value)} />
-          <Button onClick={() => setShowForm(true)}>Adicionar</Button>
-          <Select><option>Ordenar</option></Select>
-          <Select><option>Exibir</option></Select>
-          <Select><option>Tags</option></Select>
-          <Select><option>Categoria</option></Select>
-          <Button onClick={exportarCSV}>Exportar</Button>
-        </TopBar>
+      <TopBar>
+        <Input
+          placeholder="Pesquisar produtos"
+          value={filtro}
+          onChange={(e) => setFiltro(e.target.value)}
+        />
+        <Button onClick={() => setShowForm(true)}>Adicionar</Button>
+        <Select><option>Ordenar</option></Select>
+        <Select><option>Exibir</option></Select>
+        <Select><option>Tags</option></Select>
+        <Select><option>Categoria</option></Select>
+        <Button onClick={exportarCSV}>Exportar</Button>
+      </TopBar>
 
-        {showForm && (
-          <div style={{ marginBottom: '20px' }}>
-            <h3>{editIndex !== null ? 'Editar Produto' : 'Novo Produto'}</h3>
-            <Input placeholder="Nome" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
-            <Input placeholder="Código" value={form.codigo} onChange={(e) => setForm({ ...form, codigo: e.target.value })} />
-            <Input placeholder="Quantidade" type="number" value={form.quantidade} onChange={(e) => setForm({ ...form, quantidade: e.target.value })} />
-            <Input placeholder="Preço" type="number" value={form.preco} onChange={(e) => setForm({ ...form, preco: e.target.value })} />
-            <Button onClick={adicionarProduto}>{editIndex !== null ? 'Atualizar' : 'Salvar'}</Button>
-          </div>
-        )}
+      {showForm && (
+        <FormCard>
+          <h3>{editIndex !== null ? 'Editar Produto' : 'Novo Produto'}</h3>
+          <Input
+            placeholder="Nome"
+            value={form.nome}
+            onChange={(e) => setForm({ ...form, nome: e.target.value })}
+          />
+          <Input
+            placeholder="Código"
+            value={form.codigo}
+            onChange={(e) => setForm({ ...form, codigo: e.target.value })}
+          />
+          <Input
+            placeholder="Quantidade"
+            type="number"
+            value={form.quantidade}
+            onChange={(e) => setForm({ ...form, quantidade: e.target.value })}
+          />
+          <Input
+            placeholder="Preço"
+            type="number"
+            value={form.preco}
+            onChange={(e) => setForm({ ...form, preco: e.target.value })}
+          />
+          <Button onClick={adicionarProduto}>
+            {editIndex !== null ? 'Atualizar' : 'Salvar'}
+          </Button>
+        </FormCard>
+      )}
 
+      <TableWrapper>
         <Table>
           <thead>
             <tr>
@@ -168,19 +198,26 @@ export function Estoque() {
                 <Td>R$ {p.preco}</Td>
                 <Td>
                   <Button onClick={() => editarProduto(inicio + i)}>Editar</Button>
-                  <Button onClick={() => excluirProduto(inicio + i)} style={{ backgroundColor: '#dc3545' }}>Excluir</Button>
+                  <Button
+                    onClick={() => excluirProduto(inicio + i)}
+                    style={{ backgroundColor: '#dc3545' }}
+                  >
+                    Excluir
+                  </Button>
                 </Td>
               </tr>
             ))}
           </tbody>
         </Table>
+      </TableWrapper>
 
-        <Pagination>
-          {[...Array(totalPaginas)].map((_, i) => (
-            <Button key={i} onClick={() => setPaginaAtual(i + 1)}>{i + 1}</Button>
-          ))}
-        </Pagination>
-      </MotionWrap>
+      <Pagination>
+        {[...Array(totalPaginas)].map((_, i) => (
+          <Button key={i} onClick={() => setPaginaAtual(i + 1)}>
+            {i + 1}
+          </Button>
+        ))}
+      </Pagination>
     </Container>
   );
 }

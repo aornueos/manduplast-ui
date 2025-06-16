@@ -2,49 +2,72 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { motion } from 'framer-motion';
 
 const Container = styled.div`
   display: flex;
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  padding: 20px;
+
 `;
 
-const MotionBox = styled(motion.div)`
+const Box = styled.div`
   display: flex;
   width: 900px;
+  max-width: 100%;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  flex-direction: column;
+
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 `;
 
 const Left = styled.div`
   flex: 1;
   padding: 40px;
-`;
-
-const Right = styled.div`
-  flex: 1;
-  background-color: #00a859;
-  color: #fff;
-  display: flex;
+  background: #fff;
+    display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
 
+const Right = styled.div`
+  flex: 1;
+  background-color: #00a859;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+`;
+
 const Title = styled.h2`
   margin-bottom: 20px;
+  text-align: center;
+    display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Input = styled.input`
-  display: block;
   width: 100%;
   margin-bottom: 10px;
   padding: 10px;
   font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+    display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Button = styled.button`
@@ -53,9 +76,13 @@ const Button = styled.button`
   padding: 12px;
   border: none;
   cursor: pointer;
-  width: 100%;
+  width: 50%;
   font-size: 16px;
-  margin-top: 10px;
+  border-radius: 6px;
+    display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 export function Login({ setUsuarioLogado }) {
@@ -79,11 +106,7 @@ export function Login({ setUsuarioLogado }) {
 
   return (
     <Container>
-      <MotionBox
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-      >
+      <Box>
         <Left>
           <Title>LOGIN</Title>
           <Input
@@ -103,9 +126,8 @@ export function Login({ setUsuarioLogado }) {
         <Right>
           <h1>Bem-vindo de volta</h1>
           <p>Entre com sua conta para acessar a plataforma</p>
-          <Button onClick={handleLogin}>Entrar</Button>
         </Right>
-      </MotionBox>
+      </Box>
     </Container>
   );
 }

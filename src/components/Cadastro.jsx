@@ -1,48 +1,70 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
 
 const Container = styled.div`
   display: flex;
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  padding: 20px;
 `;
 
-const MotionBox = styled(motion.div)`
+const Box = styled.div`
   display: flex;
   width: 900px;
+  max-width: 100%;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  flex-direction: column;
+
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 `;
 
 const Left = styled.div`
   flex: 1;
   padding: 40px;
-`;
-
-const Right = styled.div`
-  flex: 1;
-  background-color: #00a859;
-  color: #fff;
+  background: #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
 
+const Right = styled.div`
+  flex: 1;
+  background-color: #00a859;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+`;
+
 const Title = styled.h2`
   margin-bottom: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Input = styled.input`
-  display: block;
   width: 100%;
   margin-bottom: 10px;
   padding: 10px;
   font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Button = styled.button`
@@ -51,9 +73,13 @@ const Button = styled.button`
   padding: 12px;
   border: none;
   cursor: pointer;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
   font-size: 16px;
-  margin-top: 10px;
+  border-radius: 6px;
 `;
 
 export function Cadastro() {
@@ -61,10 +87,17 @@ export function Cadastro() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.nome || !form.email || !form.senha) return alert('Preencha todos os campos');
+    if (!form.nome || !form.email || !form.senha) {
+      return alert('Preencha todos os campos');
+    }
+
     const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
     const jaExiste = usuarios.some(u => u.email === form.email);
-    if (jaExiste) return alert('E-mail já cadastrado');
+
+    if (jaExiste) {
+      return alert('E-mail já cadastrado');
+    }
+
     usuarios.push(form);
     localStorage.setItem('usuarios', JSON.stringify(usuarios));
     alert('Cadastro realizado com sucesso!');
@@ -73,24 +106,32 @@ export function Cadastro() {
 
   return (
     <Container>
-      <MotionBox
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-      >
+      <Box>
         <Left>
           <Title>CADASTRO</Title>
-          <Input placeholder="Nome" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
-          <Input placeholder="E-mail" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-          <Input placeholder="Senha" type="password" value={form.senha} onChange={(e) => setForm({ ...form, senha: e.target.value })} />
+          <Input
+            placeholder="Nome"
+            value={form.nome}
+            onChange={(e) => setForm({ ...form, nome: e.target.value })}
+          />
+          <Input
+            placeholder="E-mail"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+          />
+          <Input
+            placeholder="Senha"
+            type="password"
+            value={form.senha}
+            onChange={(e) => setForm({ ...form, senha: e.target.value })}
+          />
           <Button onClick={handleSubmit}>Cadastrar</Button>
         </Left>
         <Right>
-          <h1>Bem-vindo ao sistema</h1>
+          <h1>Bem-vindo ao NextERP</h1>
           <p>Crie sua conta para acessar a plataforma</p>
-          <Button onClick={handleSubmit}>Cadastrar</Button>
         </Right>
-      </MotionBox>
+      </Box>
     </Container>
   );
 }
