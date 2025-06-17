@@ -1,13 +1,31 @@
-import axios from 'axios';
-
-export const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
-});
+import api from './api';
 
 export const UsuarioAPI = {
-  login: (email, senha) =>
-    api.post('/usuarios/login', { email, senha }).then((res) => res.data),
+  async cadastrar(dados) {
+    const response = await api.post('/usuarios/cadastro', dados);
+    return response.data;
+  },
 
-  cadastrar: (dados) =>
-    api.post('/usuarios/cadastro', dados).then((res) => res.data),
+  async login(email, senha) {
+    const response = await api.post('/usuarios/login', {
+      email: email,
+      senha: senha,
+    });
+
+    const usuario = {
+      nome: response.data.nome,
+      email: response.data.email,
+      id: response.data.id,
+    };
+
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+
+    return usuario;
+  },
+
+  async buscarPorId(id) {
+    const response = await api.get(`/usuarios/${id}`);
+    return response.data;
+  },
 };

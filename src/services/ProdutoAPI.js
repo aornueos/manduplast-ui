@@ -1,12 +1,22 @@
-import axios from 'axios';
-
-export const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
-});
+import api from './api';
 
 export const ProdutoAPI = {
-  listar: () => api.get('/produtos').then(res => res.data),
-  salvar: (produto) => api.post('/produtos', produto).then(res => res.data),
-  atualizar: (id, produto) => api.put(`/produtos/${id}`, produto).then(res => res.data),
-  excluir: (id) => api.delete(`/produtos/${id}`),
+  async listar() {
+    const response = await api.get('/produtos');
+    return response.data;
+  },
+
+  async salvar(dados) {
+    const response = await api.post('/produtos', dados);
+    return response.data;
+  },
+
+  async atualizar(id, dados) {
+    const response = await api.put(`/produtos/${id}`, dados);
+    return response.data;
+  },
+
+  async excluir(id) {
+    await api.delete(`/produtos/${id}`);
+  },
 };

@@ -1,8 +1,22 @@
 import api from './api';
 
 export const PedidoAPI = {
-  listar: () => api.get('/pedidos'),
-  salvar: (pedido) => api.post('/pedidos', pedido),
-  atualizar: (id, pedido) => api.put(`/pedidos/${id}`, pedido),
-  excluir: (id) => api.delete(`/pedidos/${id}`),
+  async listar() {
+    const response = await api.get('/pedidos');
+    return response.data;
+  },
+
+  async salvar(dados) {
+    const response = await api.post('/pedidos', dados);
+    return response.data;
+  },
+
+  async atualizar(id, dados) {
+    const response = await api.put(`/pedidos/${id}`, dados);
+    return response.data;
+  },
+
+  async excluir(id) {
+    await api.delete(`/pedidos/${id}`);
+  },
 };

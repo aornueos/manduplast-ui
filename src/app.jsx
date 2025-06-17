@@ -76,14 +76,20 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 🔥 Carregar usuário do localStorage ao iniciar
-  useEffect(() => {
-    const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
-    if (usuario) {
+useEffect(() => {
+  try {
+    const userData = localStorage.getItem('usuarioLogado');
+    if (userData) {
+      const usuario = JSON.parse(userData);
       setUsuarioLogado(usuario);
     }
+  } catch (error) {
+    console.error('Erro ao carregar usuário:', error);
+    localStorage.removeItem('usuarioLogado'); // 🔥 Se corrompido, remove
+  } finally {
     setLoading(false);
-  }, []);
+  }
+}, []);
 
   const handleLogout = () => {
     localStorage.removeItem('usuarioLogado');
