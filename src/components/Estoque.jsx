@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ProdutoAPI } from '../services/ProdutoAPI';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Container = styled.div`padding: 20px;`;
 const TopBar = styled.div`
@@ -22,6 +23,18 @@ const Button = styled.button`
   border: none;
   cursor: pointer;
   border-radius: 6px;
+  &:hover { opacity: 0.9; }
+`;
+const LabelButton = styled.label`
+  padding: 8px 16px;
+  background-color: #00a859;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   &:hover { opacity: 0.9; }
 `;
 const Select = styled.select`
@@ -139,6 +152,55 @@ export function Estoque() {
     }
   };
 
+  const exportarCSV = async () => {
+    try {
+      const token = localStorage.getItem('token');
+
+      const response = await axios.get('http://localhost:8080/api/arquivos/exportar-produtos', {
+        responseType: 'blob',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'produtos.csv');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      toast.success('Exportação concluída!');
+    } catch (error) {
+      toast.error('Erro ao exportar CSV.');
+    }
+  };
+
+  const importarCSV = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const token = localStorage.getItem('token');
+
+      await axios.post('http://localhost:8080/api/arquivos/importar-produtos', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      toast.success('Importação concluída!');
+      carregarProdutos();
+    } catch (error) {
+      toast.error('Erro ao importar CSV.');
+    }
+  };
+
   const produtosFiltrados = produtos
     .filter(
       (p) =>
@@ -168,6 +230,19 @@ export function Estoque() {
           onChange={(e) => setFiltro(e.target.value)}
         />
         <Button onClick={() => { setShowForm(true); setForm({ nome: '', codigo: '', quantidade: '', preco: '' }); }}>Adicionar</Button>
+
+        <Button onClick={exportarCSV}>Exportar CSV</Button>
+
+        <LabelButton>
+          Importar CSV
+          <input
+            type="file"
+            accept=".csv"
+            onChange={importarCSV}
+            style={{ display: 'none' }}
+          />
+        </LabelButton>
+
         <Select value={ordenar} onChange={(e) => setOrdenar(e.target.value)}>
           <option value="">Ordenar</option>
           <option value="nome-asc">Nome A-Z</option>
