@@ -1,11 +1,7 @@
+import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-export function PrivateRoute({ children, usuarioLogado, loading }) {
-  if (loading) {
-    return null; // ou um spinner de carregamento, se desejar
-  }
-  if (!usuarioLogado) {
-    return <Navigate to="/login" replace />;
-  }
-  return children;
+export function PrivateRoute({ children }) {
+  const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
+  return usuarioLogado ? children : <Navigate to="/login" />;
 }

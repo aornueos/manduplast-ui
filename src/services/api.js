@@ -1,10 +1,7 @@
-export const fakeAPI = {
-  products: [],
-  addProduct(product) {
-    this.products.push(product);
-    return Promise.resolve(product);
-  },
-  getProducts() {
-    return Promise.resolve(this.products);
-  },
-};
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://localhost:8080/api',
+});
+
+export default api;

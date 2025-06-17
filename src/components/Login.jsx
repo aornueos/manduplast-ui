@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { UsuarioAPI } from '../services/UsuarioAPI';
 
 const Container = styled.div`
   display: flex;
@@ -91,22 +92,19 @@ export function Login({ setUsuarioLogado }) {
   const [senha, setSenha] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !senha) {
       return toast.error('Preencha todos os campos');
     }
 
-    const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-    const usuario = usuarios.find(
-      (u) => u.email === email && u.senha === senha
-    );
-
-    if (usuario) {
+    try {
+      const usuario = await UsuarioAPI.login(email, senha);
       localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
       setUsuarioLogado(usuario);
       toast.success('Login realizado com sucesso!');
       navigate('/estoque');
-    } else {
+    } catch (error) {
+      console.error(error);
       toast.error('E-mail ou senha inválidos');
     }
   };

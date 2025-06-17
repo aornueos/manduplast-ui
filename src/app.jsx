@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Routes, Route, Link, useNavigate, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { Login } from './components/Login.jsx';
-import { OrderForm } from './components/OrderForm.jsx';
-import { LandingPage } from './components/LandingPage.jsx';
-import { Estoque } from './components/Estoque.jsx';
-import { Cadastro } from './components/Cadastro.jsx';
-import { Perfil } from './components/Perfil.jsx';
+import { Login } from './components/Login';
+import { OrderForm } from './components/OrderForm';
+import { LandingPage } from './components/LandingPage';
+import { Estoque } from './components/Estoque';
+import { Cadastro } from './components/Cadastro';
+import { Perfil } from './components/Perfil';
 import { toast } from 'react-toastify';
 import { User, LogOut, UserCircle2 } from 'lucide-react';
-import { PageWrapper } from './components/PageWrapper.jsx';
-import { PrivateRoute } from './components/PrivateRoute.jsx';
+import { PageWrapper } from './components/PageWrapper';
+import { PrivateRoute } from './components/PrivateRoute';
 
 const Nav = styled.nav`
   position: fixed;
@@ -42,7 +42,7 @@ const Dropdown = styled.div`
 `;
 
 const DropdownContent = styled.div`
-  display: ${({ show }) => (show ? 'block' : 'none')};
+  display: ${(props) => (props.$show ? 'block' : 'none')};
   position: absolute;
   right: 0;
   background-color: #f9f9f9;
@@ -51,7 +51,6 @@ const DropdownContent = styled.div`
   z-index: 1;
   border-radius: 6px;
   overflow: hidden;
-  animation: fadeIn 0.3s ease-in-out;
 `;
 
 const DropdownItem = styled.button`
@@ -77,7 +76,7 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 🔥 Carregar usuário do localStorage
+  // 🔥 Carregar usuário do localStorage ao iniciar
   useEffect(() => {
     const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
     if (usuario) {
@@ -98,6 +97,7 @@ export default function App() {
       <Nav>
         <Link to="/">Início</Link>
         <Link to="/estoque">Produtos</Link>
+        <Link to="/pedidos">Pedidos</Link>
         {usuarioLogado ? (
           <Dropdown style={{ marginLeft: 'auto' }}>
             <span
@@ -106,7 +106,7 @@ export default function App() {
             >
               <UserCircle2 size={20} /> {usuarioLogado.nome}
             </span>
-            <DropdownContent show={dropdownAberto}>
+            <DropdownContent $show={dropdownAberto}>
               <DropdownItem onClick={() => navigate('/perfil')}>
                 <User size={16} /> Ver Perfil
               </DropdownItem>
@@ -116,12 +116,10 @@ export default function App() {
             </DropdownContent>
           </Dropdown>
         ) : (
-          <>
-            <Link to="/login" style={{ marginLeft: 'auto' }}>
-              Login
-            </Link>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: '10px' }}>
+            <Link to="/login">Login</Link>
             <Link to="/cadastro">Cadastro</Link>
-          </>
+          </div>
         )}
       </Nav>
 

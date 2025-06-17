@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { UsuarioAPI } from '../services/UsuarioAPI';
 
 const Container = styled.div`
   display: flex;
@@ -90,7 +91,7 @@ export function Cadastro() {
   const [form, setForm] = useState({ nome: '', email: '', senha: '' });
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!form.nome || !form.email || !form.senha) {
@@ -106,18 +107,14 @@ export function Cadastro() {
       return toast.error('A senha deve ter pelo menos 4 caracteres');
     }
 
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    const jaExiste = usuarios.some((u) => u.email === form.email);
-
-    if (jaExiste) {
-      return toast.error('E-mail já cadastrado');
+    try {
+      await UsuarioAPI.cadastrar(form);
+      toast.success('Cadastro realizado com sucesso!');
+      navigate('/login');
+    } catch (error) {
+      console.error(error);
+      toast.error('Erro ao cadastrar. Verifique se o e-mail já existe.');
     }
-
-    usuarios.push(form);
-    localStorage.setItem('usuarios', JSON.stringify(usuarios));
-    toast.success('Cadastro realizado com sucesso!');
-    setForm({ nome: '', email: '', senha: '' });
-    navigate('/login');
   };
 
   return (
